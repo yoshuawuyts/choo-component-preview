@@ -1,4 +1,5 @@
 var createCache = require('./lib/cache')
+var onIdle = require('on-idle')
 var assert = require('assert')
 
 module.exports = store
@@ -13,6 +14,16 @@ function store () {
         return callback(state, emit, Render)
       })
     }
+
+    emitter.on(state.events.RENDER, function () {
+      onIdle(function () {
+        var keys = Object.keys(cache.cache)
+        for (var id, i = 0, l = keys.length; i < l; i++) {
+          id = keys[i]
+          if (!cache.cache[id].element) delete cache.cache[id]
+        }
+      })
+    })
 
     function Render (Component) {
       assert.equal(typeof Component, 'function', 'choo-component-preview: Component should be type function')
