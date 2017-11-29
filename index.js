@@ -16,14 +16,16 @@ function store () {
     }
 
     emitter.on(state.events.RENDER, function () {
-      onIdle(function () {
-        var keys = Object.keys(cache.cache)
-        for (var id, i = 0, l = keys.length; i < l; i++) {
-          id = keys[i]
-          if (!cache.cache[id].element) delete cache.cache[id]
-        }
-      })
+      onIdle(cleanup)
     })
+
+    function cleanup () {
+      var keys = Object.keys(cache.cache)
+      for (var id, i = 0, len = keys.length; i < len; i++) {
+        id = keys[i]
+        if (!cache.cache[id].element) delete cache.cache[id]
+      }
+    }
 
     function Render (Component) {
       assert.equal(typeof Component, 'function', 'choo-component-preview: Component should be type function')
