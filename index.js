@@ -6,7 +6,7 @@ module.exports = store
 function store () {
   return function (state, emitter, app) {
     var setRoute = app.route.bind(app)
-    var cache = createCache(state, emitter.emit)
+    var cache = createCache(state, (eventName, data) => emitter.emit(eventName, data))
 
     app.route = function (route, callback) {
       setRoute(route, function (state, emit) {
