@@ -1,4 +1,5 @@
 var createCache = require('./lib/cache')
+var onIdle = require('on-idle')
 var assert = require('assert')
 
 module.exports = store
@@ -12,6 +13,18 @@ function store () {
       setRoute(route, function (state, emit) {
         return callback(state, emit, Render)
       })
+    }
+
+    emitter.on(state.events.RENDER, function () {
+      onIdle(cleanup)
+    })
+
+    function cleanup () {
+      var keys = Object.keys(cache.cache)
+      for (var id, i = 0, len = keys.length; i < len; i++) {
+        id = keys[i]
+        if (!cache.cache[id].element) delete cache.cache[id]
+      }
     }
 
     function Render (Component) {
