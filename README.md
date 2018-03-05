@@ -19,8 +19,10 @@ var Component = require('nanocomponent')
 var html = require('choo/html')
 
 module.exports = class Article extends Component {
-  static identity (article) {
-    return `article-${article.id}`
+  constructor (name, state, emit) {
+    super(name)
+    this.state = state
+    this.emit = emit
   }
 
   createElement (article) {
@@ -43,13 +45,15 @@ var Article = require('./components/article')
 var Header = require('./components/header')
 var Footer = require('./components/footer')
 
-module.exports = function (state, emit, render) {
+module.exports = function (state, emit) {
   return html`
-    <body
-      ${render(Header)}
-      ${state.articles.map(article => render(Article, article))}
-      ${render(Footer)}
-    </body
+    <body>
+      ${state.cache(Header, 'header').render()}
+      ${state.articles.map(article => {
+        return state.cache(Article, article.id).render(article)
+      })}
+      ${state.cache(Footer, 'footer').render()}
+    </body>
   `
 }
 ```
