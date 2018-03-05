@@ -29,5 +29,11 @@ function store () {
       }
       return cache.render.apply(cache, args)
     }
+
+    // When the state gets stringified, make sure `state.cache` isn't
+    // stringified too.
+    Render.toJson = function () {
+      return null
+    }
   }
 }
