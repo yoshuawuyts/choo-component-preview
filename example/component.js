@@ -2,7 +2,7 @@ var Component = require('nanocomponent')
 var html = require('choo/html')
 
 module.exports = class Something extends Component {
-  static identity (name) {
+  static id (name) {
     return `something-${name}`
   }
 
