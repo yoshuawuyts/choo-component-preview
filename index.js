@@ -3,9 +3,9 @@ var assert = require('assert')
 
 module.exports = store
 
-function store () {
+function store (lru) {
   return function (state, emitter, app) {
-    var cache = new Cache(state, emitter.emit.bind(emitter))
+    var cache = new Cache(state, emitter.emit.bind(emitter), lru)
     state.cache = Render
 
     function Render (Component, id) {
