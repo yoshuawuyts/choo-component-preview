@@ -2,7 +2,7 @@
   "name": "choo-component-preview",
   "description": "Preview for what choo's component API will look like",
   "repository": "yoshuawuyts/choo-component-preview",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "scripts": {
     "build": "bankai build example",
     "start": "bankai start example",
