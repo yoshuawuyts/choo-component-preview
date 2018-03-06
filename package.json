@@ -9,7 +9,7 @@
     "test": "standard"
   },
   "dependencies": {
-    "on-idle": "^3.1.4"
+    "nanolru": "^1.0.0"
   },
   "devDependencies": {
     "bankai": "^9.0.1",

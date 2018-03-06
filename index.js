@@ -1,39 +1,26 @@
-var createCache = require('./lib/cache')
-var onIdle = require('on-idle')
+var Cache = require('./lib/cache')
 var assert = require('assert')
 
 module.exports = store
 
-function store () {
+function store (lru) {
   return function (state, emitter, app) {
-    var setRoute = app.route.bind(app)
-    var cache = createCache(state, emitter.emit.bind(emitter))
+    var cache = new Cache(state, emitter.emit.bind(emitter), lru)
+    state.cache = Render
 
-    app.route = function (route, callback) {
-      setRoute(route, function (state, emit) {
-        return callback(state, emit, Render)
-      })
-    }
-
-    emitter.on(state.events.RENDER, function () {
-      onIdle(cleanup)
-    })
-
-    function cleanup () {
-      var keys = Object.keys(cache.cache)
-      for (var id, i = 0, len = keys.length; i < len; i++) {
-        id = keys[i]
-        if (!cache.cache[id].element) delete cache.cache[id]
-      }
-    }
-
-    function Render (Component) {
+    function Render (Component, id) {
       assert.equal(typeof Component, 'function', 'choo-component-preview: Component should be type function')
       var args = []
       for (var i = 0, len = arguments.length; i < len; i++) {
         args.push(arguments[i])
       }
       return cache.render.apply(cache, args)
+    }
+
+    // When the state gets stringified, make sure `state.cache` isn't
+    // stringified too.
+    Render.toJson = function () {
+      return null
     }
   }
 }
