@@ -19,7 +19,7 @@ function store (lru) {
 
     // When the state gets stringified, make sure `state.cache` isn't
     // stringified too.
-    Render.toJson = function () {
+    Render.toJSON = function () {
       return null
     }
   }
