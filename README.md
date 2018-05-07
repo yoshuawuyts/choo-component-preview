@@ -15,7 +15,7 @@ app.mount('body')
 ```
 
 ```js
-var Component = require('nanocomponent')
+var Component = require('choo/component')
 var html = require('choo/html')
 
 module.exports = class Article extends Component {
